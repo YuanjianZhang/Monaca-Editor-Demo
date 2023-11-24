@@ -1,2 +1,1 @@
-#### Monaco Editor + Vue Exercise Demo 
-
+#### Monaco Editor + Vue Exercise Demo
