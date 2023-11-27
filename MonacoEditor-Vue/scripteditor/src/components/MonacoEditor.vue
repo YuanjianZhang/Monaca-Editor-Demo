@@ -1,6 +1,7 @@
 <script setup>
 import * as monaco from "monaco-editor";
 import { ref, onBeforeUpdate, onMounted, onBeforeMount } from "vue";
+
 const props = defineProps({
   label: String,
   id: String,
@@ -8,7 +9,6 @@ const props = defineProps({
   config: Object,
   heightValue: String,
 });
-
 let editorInstance = ref();
 const defaultConfig = {
   value: `public class Program{
@@ -30,11 +30,11 @@ const defaultConfig = {
 };
 
 onBeforeMount(() => {
-  console.log(`the component is on Before Mount.`);
+  console.debug(`the component is on Before Mount.`);
 });
 
 onMounted(() => {
-  console.log(`the component is now mounted.`);
+  console.debug(`the component is now mounted.`);
 
   editorInstance = monaco.editor.create(
     document.getElementById(props.id),
@@ -42,45 +42,28 @@ onMounted(() => {
   );
 });
 onBeforeUpdate(() => {
-  console.log(`the component is on Before Update.`);
+  console.debug(`the component is on Before Update.`);
 });
 
 const getEditor = () => {
   return editorInstance;
 };
-
 defineExpose({
-  defaultConfig,
   getEditor,
 });
 </script>
 
 <template>
-  <div
-    class="editorComponents"
-    :class="className"
-    :style="{ height: heightValue }"
-  >
-    <div :id="id + 'Label'" class="label">{{ label }}：</div>
+  <div class="editorComponents">
+    <div :id="id + '_label'" class="label">{{ label }}：</div>
     <div class="editor" :id="id"></div>
   </div>
 </template>
 
-<script>
-// config =  config ?? defaultConfig;
-// console.log(config);
-
-// config.onDidChangeModel = function(event){
-//   console.log(event)
-//   content  = event
-// }
-
-//
-</script>
-
 <style scoped>
 .editorComponents {
-  min-height: 50px;
+  height: 100%;
+  width: 100%;
 }
 .editorComponents .label {
   height: 20px;
