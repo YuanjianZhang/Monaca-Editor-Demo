@@ -41,6 +41,7 @@ jobs:
     - name: Git Push Deploy
       run: |
         cd monacoeditordemo/dist && git init
+        git branch gh-pages && git checkout gh-pages
         git add . && git commit -m 'build new version'
-        git remote add gh https://github.com/YuanjianZhang/Monaca-Editor-Demo.git
-        git push --force origin gh/gh-pages
+        git remote add origin https://github.com/YuanjianZhang/Monaca-Editor-Demo.git
+        git push --force origin gh-pages
