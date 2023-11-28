@@ -42,5 +42,5 @@ jobs:
       run: |
         cd monacoeditordemo/dist && git init
         git add . && git commit -m 'build new version'
-        git remote add https://github.com/YuanjianZhang/Monaca-Editor-Demo.git
-        git push --force origin gh-pages
+        git remote add gh https://github.com/YuanjianZhang/Monaca-Editor-Demo.git
+        git push --force origin gh/gh-pages
