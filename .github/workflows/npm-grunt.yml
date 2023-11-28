@@ -10,19 +10,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [20.x]
+    # strategy:
+    #   matrix:
+    #     node-version: [20.x]
 
     steps:
     - uses: actions/checkout@v3
       with:
-          token: ${{ secrets.PAT }}
+          token: 
 
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js 20.x
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: '20.x'
 
     - name: Build
       run: |
@@ -30,18 +30,16 @@ jobs:
         npm install
         npm run build
 
-    - name: Set git config
+    - name: Deploy
       env:
-        GH_TOKEN: ${{ github.token }}
+        # Github
+        GITHUB_REPO: github.com/YuanjianZhang/Monaca-Editor-Demo.git 
       run: |
+        cd monacoeditordemo/dist && git init && git add .
         git config --global user.name "${GITHUB_ACTOR}"
         git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-
-    - name: Git Push Deploy
-      run: |
-        cd monacoeditordemo/dist && git init
-        git remote add origin https://github.com/YuanjianZhang/Monaca-Editor-Demo.git
-        git remote
-        git add . && git commit -m 'build new version'
+        git add .
+        git remote add origin 
+        && git commit -m 'GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S') '
         git branch gh-pages && git checkout gh-pages
-        git push origin gh-pages --force 
+        git push --force 'https://${{ secrets.PAT }}@$GITHUB_REPO' gh-pages
