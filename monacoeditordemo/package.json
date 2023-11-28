@@ -1,5 +1,5 @@
 {
-  "name": "scripteditor",
+  "name": "monacoeditordemo",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "element-plus": "^2.4.2",
+    "gh-pages": "^6.1.0",
     "monaco-editor": "^0.44.0",
     "monaco-editor-webpack-plugin": "^7.1.0",
     "vue": "^3.3.8"
