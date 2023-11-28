@@ -33,10 +33,11 @@ jobs:
     - name: Git init
       run: |
         cd monacoeditordemo/dist
-        git add . && git commit
+        ls -a
+        # git add . && git commit
     
     - name: Git Push Deploy
       run: |
-        cd monacoeditordemo/dist
-        git remote add https://github.com/YuanjianZhang/Monaca-Editor-Demo.git
-        git push origin gh-pages
+        # cd monacoeditordemo/dist
+        # git remote add https://github.com/YuanjianZhang/Monaca-Editor-Demo.git
+        # git push origin gh-pages
