@@ -28,7 +28,7 @@ jobs:
       run: |
         cd monacoeditordemo
         npm install
-        npm build
+        npm run build
     
     - name: Git init
       run: |
