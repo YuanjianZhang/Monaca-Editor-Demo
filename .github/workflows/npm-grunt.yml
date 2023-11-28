@@ -36,15 +36,11 @@ jobs:
       run: |
         git config --global user.name "${GITHUB_ACTOR}"
         git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-        git config -l
+        # git config -l
 
-    - name: Git init
-      run: |
-        cd monacoeditordemo/dist && git init
-        # git add . && git commit
-    
     - name: Git Push Deploy
       run: |
-        # cd monacoeditordemo/dist
-        # git remote add https://github.com/YuanjianZhang/Monaca-Editor-Demo.git
-        # git push origin gh-pages
+        cd monacoeditordemo/dist && git init
+        git add . && git commit
+        git remote add https://github.com/YuanjianZhang/Monaca-Editor-Demo.git
+        git push origin gh-pages
