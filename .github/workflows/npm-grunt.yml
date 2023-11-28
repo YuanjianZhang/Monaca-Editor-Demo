@@ -1,0 +1,37 @@
+name: Build And Deploy GithubPage
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+          token: ${{ secrets.PAT }}
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Build
+      run: |
+        cd monacoeditordemo
+        npm install
+        npm build
+    - name: Git init
+        cd dist
+        git add . && git commit
+    - name: Git Push Deploy
+        git remote add https://github.com/YuanjianZhang/Monaca-Editor-Demo.git
+        git push origin gh-pages
