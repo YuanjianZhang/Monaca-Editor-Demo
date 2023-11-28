@@ -13,8 +13,8 @@
 
 * [x] 可拖拽布局
 * [x] vue组件集成monaco-editor
-* [x] 格式化事件接口
-* [x] 执行代码事件接口
+* [x] 格式化`Monaco Editor`代码上下文选项
+* [x] 执行`Monaco Editor`代码事件接口
 
 ----
 

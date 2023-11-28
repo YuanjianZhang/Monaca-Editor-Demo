@@ -5,7 +5,7 @@ import MonacoEditor from "./MonacoEditor.vue";
 
 //组件配置
 const config = defineProps({
-  baseAddress:String
+  baseAddress: String,
 });
 const nugetRef = ref();
 const codeRef = ref();
@@ -18,10 +18,15 @@ const versions = [{ value: "NET6_0", label: ".net 6" }];
 //编辑器配置
 const editorConfig = {
   code: {
-    value: `public class Program
+    value: `using System.Collections;
+using System.Collections.Generic;
+public class Program
 {
-    public static void Main(string[] args){
-        Console.WriteLine("Hello Word!");
+    public string Invoke(string str){
+        return "Invoke Result:"+str;
+    }
+    public KeyValuePair<string, string> GetKVResult(string str){
+        return new KeyValuePair<string, string>("Invoke Result",str);
     }
 }`,
     language: "csharp",
@@ -40,7 +45,7 @@ const editorConfig = {
     value: ``,
     language: "plaintext",
     automaticLayout: true, // 自动布局
-    readOnly: true, // 是否为只读模式
+    readOnly: false, // 是否为只读模式
     contextmenu: false, // 上下文菜单
     wordWrap: "on", //自动换行
     minimap: {
@@ -126,7 +131,7 @@ let ExecuteCode = (e) => {
         );
     });
 };
-
+//代码格式化
 let codeFormat = (editor: monaco.editor.ICodeEditor) => {
   let scriptValue = editor.getValue();
   let headers = new Headers();
@@ -141,9 +146,20 @@ let codeFormat = (editor: monaco.editor.ICodeEditor) => {
     cache: "default",
     body: formbody,
   })
-    .then((res) => res.text())
+    .then((res) => res.json())
     .then((data) => {
-      editor.setValue(data);
+      if (data.error) {
+        previewRef.value.getEditor().setValue(data.error);
+      } else {
+        editor.pushUndoStop();
+        editor.executeEdits(null, [
+          {
+            text: data.code,
+            range: editor.getModel().getFullModelRange(),
+          },
+        ]);
+        editor.pushUndoStop();
+      }
     })
     .catch((error) => {
       previewRef.value
@@ -155,13 +171,14 @@ let codeFormat = (editor: monaco.editor.ICodeEditor) => {
         );
     });
 };
+//代码格式化上下文Action
 let codeFormatAction = {
   id: "format-code",
   label: "格式化代码",
   contextMenuOrder: 0,
   contextMenuGroupId: "1_modification",
   keybindings: [
-    monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyK | monaco.KeyCode.KeyD,
+     monaco.KeyMod.chord(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyK, monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyD)
   ],
   run: codeFormat,
 };
@@ -170,6 +187,7 @@ let draggingX = 0;
 let draggingY = 0;
 let dragging = 0;
 
+//挂载
 onMounted(() => {
   document.onmouseup = (e) => {
     dragging
@@ -185,13 +203,14 @@ onMounted(() => {
   });
 });
 
+//左右布局拖拽
 let separateMousedown = (e) => {
   e.preventDefault();
   dragging = 1;
   draggingX = e.screenX;
   toggleContentMouseMoveListener(resize);
 };
-
+//鼠标移动事件监听
 let toggleContentMouseMoveListener = (func) => {
   if (dragging) {
     document.querySelector(".content").addEventListener("mousemove", func);
@@ -199,7 +218,7 @@ let toggleContentMouseMoveListener = (func) => {
     document.querySelector(".content").removeEventListener("mousemove", func);
   }
 };
-
+//X轴上的宽度重设
 let resize = (e) => {
   if (dragging) {
     var left =
@@ -221,7 +240,7 @@ let resize = (e) => {
     draggingX = e.screenX;
   }
 };
-
+//上下布局拖拽
 let inputLabelMousedown = (e) => {
   e.preventDefault();
   if (document.querySelector(".inputEditor .label") === e.target) {
@@ -230,7 +249,7 @@ let inputLabelMousedown = (e) => {
     toggleContentMouseMoveListener(resizeY);
   }
 };
-
+//Y轴上的高度重设
 let resizeY = (e) => {
   if (dragging) {
     var codeheight =
@@ -254,6 +273,7 @@ let resizeY = (e) => {
     draggingY = e.screenY;
   }
 };
+//重置清除监听事件
 let clearJSEvents = (func) => {
   dragging = 0;
   draggingX = 0;
@@ -337,6 +357,11 @@ let clearJSEvents = (func) => {
   </div>
 </template>
 
+<style >
+.inputEditor .label:first-child {
+  cursor: ns-resize;
+}
+</style>
 <style scoped>
 .content {
   box-shadow: 0 0 1px 1px #e4e4e4;
@@ -386,10 +411,5 @@ let clearJSEvents = (func) => {
 
 .right {
   flex: 1;
-}
-</style>
-<style >
-.inputEditor .label:first-child {
-  cursor: ns-resize;
 }
 </style>
