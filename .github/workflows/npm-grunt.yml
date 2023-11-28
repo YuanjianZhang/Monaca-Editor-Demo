@@ -36,12 +36,12 @@ jobs:
       run: |
         git config --global user.name "${GITHUB_ACTOR}"
         git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-        # git config -l
 
     - name: Git Push Deploy
       run: |
         cd monacoeditordemo/dist && git init
+        git config -l
+        git remote remove origin && git remote add origin https://github.com/YuanjianZhang/Monaca-Editor-Demo.git
         git branch gh-pages && git checkout gh-pages
         git add . && git commit -m 'build new version'
-        git remote add origin https://github.com/YuanjianZhang/Monaca-Editor-Demo.git
         git push --force origin gh-pages
