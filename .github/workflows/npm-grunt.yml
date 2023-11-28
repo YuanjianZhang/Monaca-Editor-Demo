@@ -34,7 +34,7 @@ jobs:
       run: |
         cd monacoeditordemo/dist
         ls -a
-        # git add . && git commit
+        git init && git add . && git commit
     
     - name: Git Push Deploy
       run: |
