@@ -1,6 +1,6 @@
 ### Vue Demo With Monaco Editor
 
-**[View Demo Online](https://yuanjianzhang.github.io/Monaca-Editor-Demo/)** 
+<h3><a href="https://yuanjianzhang.github.io/Monaca-Editor-Demo/" target="_blank">View Demo Online</a></h3> 
 
 ### Intro
 
