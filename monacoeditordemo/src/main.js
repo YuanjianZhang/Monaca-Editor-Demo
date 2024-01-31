@@ -12,5 +12,5 @@ import 'element-plus/es/components/col/style/css'
 const app = createApp(App);
 app.use(ElSelect).use(ElInput).use(ElButton).use(ElRow).use(ElCol);
 // 全局注入参数
-app.provide('$address', '');//http://localhost:5108
+app.provide('$address', '/api');//http://localhost:5108
 app.mount('#app');

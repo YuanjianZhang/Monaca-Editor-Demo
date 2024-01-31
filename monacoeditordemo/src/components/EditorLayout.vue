@@ -112,7 +112,8 @@ let ExecuteCode = (e) => {
 
   fetch(`${config.baseAddress}/script/execute`, {
     method: "Post",
-    mode: "cors",
+    mode: "same-origin",
+    credentials: "same-origin",
     headers: headers,
     cache: "default",
     body: formbody,
@@ -141,7 +142,8 @@ let codeFormat = (editor: monaco.editor.ICodeEditor) => {
 
   fetch(`${config.baseAddress}/script/format`, {
     method: "Post",
-    mode: "cors",
+    mode: "same-origin",
+    credentials: "same-origin",
     headers: headers,
     cache: "default",
     body: formbody,
