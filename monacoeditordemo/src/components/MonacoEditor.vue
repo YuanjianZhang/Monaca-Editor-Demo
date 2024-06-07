@@ -1,6 +1,7 @@
 <script setup>
 import * as monaco from "monaco-editor";
 import { ref, onBeforeUpdate, onMounted, onBeforeMount } from "vue";
+import { MenuId, MenuRegistry } from 'monaco-editor/esm/vs/platform/actions/common/actions';
 
 const props = defineProps({
   label: String,
@@ -8,6 +9,7 @@ const props = defineProps({
   className: String,
   config: Object,
   heightValue: String,
+  removeAllMenus:Boolean
 });
 let editorInstance = ref();
 const defaultConfig = {
@@ -40,6 +42,9 @@ onMounted(() => {
     document.getElementById(props.id),
     props.config ?? defaultConfig
   );
+  if(props.removeAllMenus){
+    removeAllMenus();
+  }
 });
 onBeforeUpdate(() => {
   console.debug(`the component is on Before Update.`);
@@ -51,6 +56,18 @@ const getEditor = () => {
 defineExpose({
   getEditor,
 });
+
+const removeAllMenus = () => {
+    const contextMenuEntry = MenuRegistry._menuItems.get(MenuId.EditorContext);
+    let node = contextMenuEntry._first;
+    do {
+      if (node.element) {
+        contextMenuEntry._remove(node);
+      }
+      node = node.next;
+    } while (node !== undefined);
+};
+
 </script>
 
 <template>

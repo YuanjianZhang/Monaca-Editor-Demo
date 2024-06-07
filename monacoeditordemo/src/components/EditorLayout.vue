@@ -324,6 +324,7 @@ let clearJSEvents = (func) => {
           label="Nuget Reference"
           :config="editorConfig.nuget"
           ref="nugetRef"
+          removeAllMenus="true"
         />
       </div>
       <div class="codeEditor">
@@ -332,6 +333,7 @@ let clearJSEvents = (func) => {
           label="Code"
           :config="editorConfig.code"
           ref="codeRef"
+          removeAllMenus="true"
         />
       </div>
       <div class="inputEditor" @mousedown="inputLabelMousedown">
@@ -340,6 +342,7 @@ let clearJSEvents = (func) => {
           label="Input"
           :config="editorConfig.input"
           ref="inputRef"
+          removeAllMenus="true"
         />
       </div>
     </div>
