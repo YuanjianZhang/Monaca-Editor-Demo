@@ -1,6 +1,6 @@
 <script setup>
 import * as monaco from "monaco-editor";
-import { ref, onBeforeUpdate, onMounted, onBeforeMount } from "vue";
+import { toRaw,ref, onBeforeUpdate, onMounted, onBeforeMount } from "vue";
 import { MenuId, MenuRegistry } from 'monaco-editor/esm/vs/platform/actions/common/actions';
 
 const props = defineProps({
@@ -11,7 +11,7 @@ const props = defineProps({
   heightValue: String,
   removeAllMenus:Boolean
 });
-let editorInstance = ref();
+const editorInstance = ref();
 const defaultConfig = {
   value: `public class Program{
         public static void Main(string[] args){
@@ -38,7 +38,7 @@ onBeforeMount(() => {
 onMounted(() => {
   console.debug(`the component is now mounted.`);
 
-  editorInstance = monaco.editor.create(
+  editorInstance.value = monaco.editor.create(
     document.getElementById(props.id),
     props.config ?? defaultConfig
   );
@@ -50,9 +50,8 @@ onBeforeUpdate(() => {
   console.debug(`the component is on Before Update.`);
 });
 
-const getEditor = () => {
-  return editorInstance;
-};
+const getEditor = () => toRaw(editorInstance.value);
+
 defineExpose({
   getEditor,
 });
