@@ -98,7 +98,7 @@ public class Program
   },
 };
 //智能感知
-let Intellisense = (e) => {};
+let Intellisense = (e) => { };
 //执行代码
 let ExecuteCode = (e) => {
   let scriptValue = codeRef.value.getEditor().getValue();
@@ -126,8 +126,7 @@ let ExecuteCode = (e) => {
       previewRef.value
         .getEditor()
         .setValue(
-          `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\t=>\tThere has been a problem with your fetch operation:\n${
-            error.stack
+          `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\t=>\tThere has been a problem with your fetch operation:\n${error.stack
           }`
         );
     });
@@ -167,8 +166,7 @@ let codeFormat = (editor: monaco.editor.ICodeEditor) => {
       previewRef.value
         .getEditor()
         .setValue(
-          `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\t=>\tThere has been a problem with your fetch operation:\n${
-            error.stack
+          `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\t=>\tThere has been a problem with your fetch operation:\n${error.stack
           }`
         );
     });
@@ -180,7 +178,7 @@ let codeFormatAction = {
   contextMenuOrder: 0,
   contextMenuGroupId: "1_modification",
   keybindings: [
-     monaco.KeyMod.chord(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyK, monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyD)
+    monaco.KeyMod.chord(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyK, monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyD)
   ],
   run: codeFormat,
 };
@@ -199,10 +197,6 @@ onMounted(() => {
       : "";
   };
   codeRef.value.getEditor().addAction(codeFormatAction);
-  codeRef.value.getEditor().onDidChangeModelContent((e) => {
-    // do somethings ...
-    // console.log("内容变更！");
-  });
 });
 
 //左右布局拖拽
@@ -214,31 +208,26 @@ let separateMousedown = (e) => {
 };
 //鼠标移动事件监听
 let toggleContentMouseMoveListener = (func) => {
+  var contentEle = document.querySelector(".content") as HTMLElement;
   if (dragging) {
-    document.querySelector(".content").addEventListener("mousemove", func);
+    contentEle.addEventListener("mousemove", func);
   } else {
-    document.querySelector(".content").removeEventListener("mousemove", func);
+    contentEle.removeEventListener("mousemove", func);
   }
 };
 //X轴上的宽度重设
 let resize = (e) => {
   if (dragging) {
-    var left =
-      document.querySelector(".left").clientWidth + (e.screenX - draggingX);
-    var right =
-      document.querySelector(".right").clientWidth - (e.screenX - draggingX);
+    var leftEle = document.querySelector(".left") as HTMLElement;
+    var rightEle = document.querySelector(".right") as HTMLElement;
+    var left = leftEle.clientWidth + (e.screenX - draggingX);
+    var right = rightEle.clientWidth - (e.screenX - draggingX);
     if (left < 400 || right < 400) {
       return;
     }
     console.debug("left", left, "right", right);
-    (<HTMLElement>document.querySelector(".left")).style.setProperty(
-      "width",
-      left + "px"
-    );
-    (<HTMLElement>document.querySelector(".right")).style.setProperty(
-      "width",
-      right + "px"
-    );
+    leftEle.style.setProperty("width", `${left}px`);
+    rightEle.style.setProperty("width", `${right}px`);
     draggingX = e.screenX;
   }
 };
@@ -254,24 +243,16 @@ let inputLabelMousedown = (e) => {
 //Y轴上的高度重设
 let resizeY = (e) => {
   if (dragging) {
-    var codeheight =
-      document.querySelector(".codeEditor").clientHeight +
-      (e.screenY - draggingY);
-    var inputheight =
-      document.querySelector(".inputEditor").clientHeight -
-      (e.screenY - draggingY);
+    var codeEle = document.querySelector(".codeEditor") as HTMLElement;
+    var inputEle = document.querySelector(".inputEditor") as HTMLElement;
+    var codeheight = codeEle.clientHeight + (e.screenY - draggingY);
+    var inputheight = inputEle.clientHeight - (e.screenY - draggingY);
     if (codeheight < 300 || inputheight < 80) {
       return;
     }
     // console.debug("codeheight", codeheight, "inputheight", inputheight);
-    (<HTMLElement>document.querySelector(".codeEditor")).style.setProperty(
-      "height",
-      codeheight + "px"
-    );
-    (<HTMLElement>document.querySelector(".inputEditor")).style.setProperty(
-      "height",
-      inputheight + "px"
-    );
+    codeEle.style.setProperty("height", `${codeheight}px`);
+    inputEle.style.setProperty("height", `${inputheight}px`);
     draggingY = e.screenY;
   }
 };
@@ -295,55 +276,28 @@ let clearJSEvents = (func) => {
             <el-row :gutter="20" justify="end" align="center">
               <el-col :span="8">
                 <el-select v-model="versionValue" placeholder="Select">
-                  <el-option
-                    v-for="item in versions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
+                  <el-option v-for="item in versions" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
               </el-col>
               <el-col :span="12">
-                <el-input
-                  v-model="methdoname"
-                  placeholder="Please input Run Methodname"
-                ></el-input>
+                <el-input v-model="methdoname" placeholder="Please input Run Methodname"></el-input>
               </el-col>
               <el-col :span="4">
-                <el-button id="executeBtn" @click="ExecuteCode" type="primary"
-                  >Run</el-button
-                >
+                <el-button id="executeBtn" @click="ExecuteCode" type="primary">Run</el-button>
               </el-col>
             </el-row>
           </el-col>
         </el-row>
       </div>
       <div class="nugetEditor">
-        <MonacoEditor
-          id="nuget"
-          label="Nuget Reference"
-          :config="editorConfig.nuget"
-          ref="nugetRef"
-          removeAllMenus="true"
-        />
+        <MonacoEditor id="nuget" label="Nuget Reference" :config="editorConfig.nuget" ref="nugetRef"
+          removeAllMenus="true" />
       </div>
       <div class="codeEditor">
-        <MonacoEditor
-          id="code"
-          label="Code"
-          :config="editorConfig.code"
-          ref="codeRef"
-          removeAllMenus="true"
-        />
+        <MonacoEditor id="code" label="Code" :config="editorConfig.code" ref="codeRef" :storageData="true" :removeAllMenus="true" />
       </div>
       <div class="inputEditor" @mousedown="inputLabelMousedown">
-        <MonacoEditor
-          id="input"
-          label="Input"
-          :config="editorConfig.input"
-          ref="inputRef"
-          removeAllMenus="true"
-        />
+        <MonacoEditor id="input" label="Input" :config="editorConfig.input" ref="inputRef" :removeAllMenus="true" />
       </div>
     </div>
     <div class="separate" @mousedown="separateMousedown">
@@ -351,18 +305,13 @@ let clearJSEvents = (func) => {
     </div>
     <div class="right">
       <div class="previewEditor">
-        <MonacoEditor
-          id="preview"
-          label="Output"
-          ref="previewRef"
-          :config="editorConfig.preview"
-        />
+        <MonacoEditor id="preview" label="Output" ref="previewRef" :config="editorConfig.preview" />
       </div>
     </div>
   </div>
 </template>
 
-<style >
+<style>
 .inputEditor .label:first-child {
   cursor: ns-resize;
 }
@@ -378,29 +327,36 @@ let clearJSEvents = (func) => {
   width: calc(100% - 10px - 10px);
   min-width: 900px;
 }
+
 .header {
   min-height: 32px;
 }
+
 .left {
   display: flex;
   flex-flow: column nowrap;
   width: 50%;
 }
+
 .nugetEditor {
   height: 120px;
   min-height: 50px;
 }
+
 .codeEditor {
   height: calc(100% - 32px - 120px - 120px);
   min-height: 100px;
 }
+
 .inputEditor {
   height: 120px;
   min-height: 50px;
 }
+
 .previewEditor {
   height: 100%;
 }
+
 .separate {
   display: flex;
   flex: 0 0 10px;
@@ -410,6 +366,7 @@ let clearJSEvents = (func) => {
 .separate:hover {
   cursor: ew-resize;
 }
+
 .separateline {
   border-right: 2px solid #dedede;
 }

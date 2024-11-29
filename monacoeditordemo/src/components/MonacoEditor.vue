@@ -9,7 +9,8 @@ const props = defineProps({
   className: String,
   config: Object,
   heightValue: String,
-  removeAllMenus:Boolean
+  removeAllMenus:Boolean,
+  storageData:Boolean
 });
 const editorInstance = ref();
 const defaultConfig = {
@@ -36,12 +37,22 @@ onBeforeMount(() => {
 });
 
 onMounted(() => {
+  const storageData = localStorage.getItem(`${props.id}_monaco_val`)||'';
+  if(storageData) props.config.value=storageData;
+  
   console.debug(`the component is now mounted.`);
 
   editorInstance.value = monaco.editor.create(
     document.getElementById(props.id),
     props.config ?? defaultConfig
   );
+  if(props.storageData){
+    editorInstance.value.onDidChangeModelContent((e) => {
+    // do somethings ...
+    // console.log("内容变更！");
+    localStorage.setItem(`${props.id}_monaco_val`,toRaw(editorInstance.value).getValue())
+  });
+  }
   if(props.removeAllMenus){
     removeAllMenus();
   }
